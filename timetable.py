@@ -80,6 +80,8 @@ def select(name,uid):
             course = details['courseName']
             branch = details['branchName']
             semester = details['semester']
+             
+
             db, cursor = connection()
             cursor.execute('''INSERT INTO collegeEntry(collegeName) values(%s)''',(college,))
             id = cursor.lastrowid
@@ -88,6 +90,16 @@ def select(name,uid):
             cursor.execute('''INSERT INTO branchEntry(courseID, branchName) values(%s, %s)''' ,(int(id),branch))
             id = cursor.lastrowid
             cursor.execute('''INSERT INTO semesterEntry(branchID, semesterName) values(%s, %s)''' ,(int(id),semester))
+            semid = cursor.lastrowid
+            for days in ['Monday','Tuesday','Wednesday','Thursday','Friday']: 
+                cursor.execute('''INSERT INTO dayEntry(semesterID, dayName) values(%s, %s)''' ,(int(semid),days))
+                id = cursor.lastrowid
+                for i in range(10):
+                    dayStart=details[days+'/starttime/'+str(i)]
+                    dayEnd=details[days+'/endtime/'+str(i)]
+                    subject=details[days+'/subject/'+str(i)]
+                    roomNo=details[days+'/roomno/'+str(i)]
+                    cursor.execute('''INSERT INTO tableEntry(dayID, subject, dayStart, dayEnd, roomNo) values(%s, %s, %s, %s, %s)''' ,(int(id),subject,dayStart,dayEnd,roomNo))
             db.commit()
             db.close()
             return redirect('/')
@@ -106,6 +118,16 @@ def select(name,uid):
             cursor.execute('''INSERT INTO branchEntry(courseID, branchName) values(%s, %s)''' ,(int(id),branch))
             id = cursor.lastrowid
             cursor.execute('''INSERT INTO semesterEntry(branchID, semesterName) values(%s, %s)''' ,(int(id),semester))
+            semid = cursor.lastrowid
+            for days in ['Monday','Tuesday','Wednesday','Thursday','Friday']: 
+                cursor.execute('''INSERT INTO dayEntry(semesterID, dayName) values(%s, %s)''' ,(int(semid),days))
+                id = cursor.lastrowid
+                for i in range(10):
+                    dayStart=details[days+'/starttime/'+str(i)]
+                    dayEnd=details[days+'/endtime/'+str(i)]
+                    subject=details[days+'/subject/'+str(i)]
+                    roomNo=details[days+'/roomno/'+str(i)]
+                    cursor.execute('''INSERT INTO tableEntry(dayID, subject, dayStart, dayEnd, roomNo) values(%s, %s, %s, %s, %s)''' ,(int(id),subject,dayStart,dayEnd,roomNo))
             db.commit()
             db.close()
             return redirect('/')
@@ -126,6 +148,16 @@ def select(name,uid):
             cursor.execute('''INSERT INTO branchEntry(courseID, branchName) values(%s, %s)''' ,(int(id),branch))
             id = cursor.lastrowid
             cursor.execute('''INSERT INTO semesterEntry(branchID, semesterName) values(%s, %s)''' ,(int(id),semester))
+            semid = cursor.lastrowid
+            for days in ['Monday','Tuesday','Wednesday','Thursday','Friday']: 
+                cursor.execute('''INSERT INTO dayEntry(semesterID, dayName) values(%s, %s)''' ,(int(semid),days))
+                id = cursor.lastrowid
+                for i in range(10):
+                    dayStart=details[days+'/starttime/'+str(i)]
+                    dayEnd=details[days+'/endtime/'+str(i)]
+                    subject=details[days+'/subject/'+str(i)]
+                    roomNo=details[days+'/roomno/'+str(i)]
+                    cursor.execute('''INSERT INTO tableEntry(dayID, subject, dayStart, dayEnd, roomNo) values(%s, %s, %s, %s, %s)''' ,(int(id),subject,dayStart,dayEnd,roomNo))
             db.commit()
             db.close()
             return redirect('/')
@@ -146,6 +178,16 @@ def select(name,uid):
             db, cursor = connection()
             id=uid
             cursor.execute('''INSERT INTO semesterEntry(branchID, semesterName) values(%s, %s)''' ,(int(id),semester))
+            semid = cursor.lastrowid
+            for days in ['Monday','Tuesday','Wednesday','Thursday','Friday']: 
+                cursor.execute('''INSERT INTO dayEntry(semesterID, dayName) values(%s, %s)''' ,(int(semid),days))
+                id = cursor.lastrowid
+                for i in range(10):
+                    dayStart=details[days+'/starttime/'+str(i)]
+                    dayEnd=details[days+'/endtime/'+str(i)]
+                    subject=details[days+'/subject/'+str(i)]
+                    roomNo=details[days+'/roomno/'+str(i)]
+                    cursor.execute('''INSERT INTO tableEntry(dayID, subject, dayStart, dayEnd, roomNo) values(%s, %s, %s, %s, %s)''' ,(int(id),subject,dayStart,dayEnd,roomNo))
             db.commit()
             db.close()
             return redirect('/')

@@ -4,7 +4,7 @@
     <div class="form-group">
         <label for="collegeName">College Name</label>
         {% if collegeName %}
-        <input type="text" class="form-control" name="collegeName" value="{{ collegeName }}"  placeholder="College Name">
+        <input type="text" class="form-control" name="collegeName" value="{{ collegeName }}" placeholder="College Name">
         {% else %}
         <input type="text" class="form-control" name="collegeName" placeholder="College Name">
         {% endif %}
@@ -20,7 +20,8 @@
     <div class="form-group">
         <label for="branchName">Branch Name</label>
         {% if branchName %}
-        <input type="text" class="form-control" name="branchName" value="{{ branchName }}" placeholder="eg. Computer Science Engineering">
+        <input type="text" class="form-control" name="branchName" value="{{ branchName }}"
+            placeholder="eg. Computer Science Engineering">
         {% else %}
         <input type="text" class="form-control" name="branchName" placeholder="eg. Computer Science Engineering">
         {% endif %}
@@ -29,6 +30,41 @@
         <label for="semester">Semester</label>
         <input type="number" class="form-control" name="semester" placeholder="eg. 1">
     </div>
+{% for day in ['Monday','Tuesday','Wednesday','Thursday','Friday'] %}
+    <div class="form-group">
+        <label>{{day}}</label>
+        <div class="form-row">
+            <div class="col">
+                <label>Start Time</label>
+            </div>
+            <div class="col">
+                <label>End Time</label>
+            </div>
+            <div class="col">
+                <label>Subject</label>
+            </div>
+            <div class="col">
+                <label>Room No.</label>
+            </div>
+        </div>
+    {% for i in range(10) %}
+        <div class="form-row">
+            <div class="col mb-3">
+                <input type="time" class="form-control" name="{{ day }}/starttime/{{ i }}">
+            </div>
+            <div class="col mb-3">
+                <input type="time" class="form-control" name="{{ day }}/endtime/{{ i }}">
+            </div>
+            <div class="col mb-3">
+                <input type="text" class="form-control" name="{{ day }}/subject/{{ i }}" placeholder="eg. DBMS">
+            </div>
+            <div class="col mb-3">
+                <input type="text" class="form-control" name="{{ day }}/roomno/{{ i }}" placeholder="eg. 332">
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endfor %}
     <button type="submit" class="btn btn-primary mb-2">Confirm</button>
 </form>
 {% endblock content %}
