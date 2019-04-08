@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST" action="">
+    <div class="form-group">
+        <label for="collegeName">College Name</label>
+        {% if collegeName %}
+        <input type="text" class="form-control" name="collegeName" value="{{ collegeName }}"  placeholder="College Name">
+        {% else %}
+        <input type="text" class="form-control" name="collegeName" placeholder="College Name">
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="courseName">Course Name</label>
+        {% if courseName %}
+        <input type="text" class="form-control" name="courseName" value="{{ courseName }}" placeholder="eg. B.Tech">
+        {% else %}
+        <input type="text" class="form-control" name="courseName" placeholder="eg. B.Tech">
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="branchName">Branch Name</label>
+        {% if branchName %}
+        <input type="text" class="form-control" name="branchName" value="{{ branchName }}" placeholder="eg. Computer Science Engineering">
+        {% else %}
+        <input type="text" class="form-control" name="branchName" placeholder="eg. Computer Science Engineering">
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="semester">Semester</label>
+        <input type="number" class="form-control" name="semester" placeholder="eg. 1">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Confirm</button>
+</form>
+{% endblock content %}
