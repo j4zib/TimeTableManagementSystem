@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request,redirect, make_respon
 from dbconnect import connection
 import MySQLdb
 import json
+import numpy as np
 app = Flask(__name__)
 
 
@@ -63,12 +64,23 @@ def get_semester(branch_id):
 
 @app.route("/timetable/<int:semester_id>/", methods = ['GET','POST'])
 def timetable(semester_id):
-    # db, cursor = connection()
-    # cursor.execute('''SELECT * FROM collegeEntry''')
-    # colleges = cursor.fetchall()
-    # db.close()
-    print ("worked")
-    return render_template('timetable.html', id=semester_id)
+    db, cursor = connection()
+    cursor.execute('''SELECT * FROM dayEntry WHERE semesterID = %s''',(semester_id,))
+    days = cursor.fetchall()
+    data = [(x[0],x[1],x[2]) for x in days]
+    days=[]
+    for x in data:
+        id=x[0]
+        cursor.execute('''SELECT * FROM tableEntry WHERE dayID = %s''',(id,))
+        table = cursor.fetchall()
+        days.append([(x[0],x[1],x[2],x[3],x[4],x[5]) for x in table])
+    
+    print(days)
+    days = [[row[i] for row in days] for i in range(len(days[0]))]
+    print(" ")
+    print(days)    
+    db.close()
+    return render_template('timetable.html', id=semester_id,tables=days)
 
 
 @app.route("/select/<string:name>/<int:uid>",methods = ['GET','POST'])
