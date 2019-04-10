@@ -1,11 +1,19 @@
-from flask import Flask, render_template, url_for, request,redirect, make_response
+from flask import Flask, render_template, url_for, request,redirect, make_response, flash
 from dbconnect import connection
 import MySQLdb
 import json
 import numpy as np
+from forms import RegistrationForm, LoginForm
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required, UserMixin
+from flask_bcrypt import Bcrypt
+
+
 app = Flask(__name__)
-
-
+app.config['SECRET_KEY'] = '24a92cbc4352146a46e0c61b51a13dca'
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
 
 @app.route("/")
 @app.route("/home", methods = ['GET','POST'])
@@ -76,7 +84,8 @@ def timetable(semester_id):
         days.append([(x[0],x[1],x[2],x[3],x[4],x[5]) for x in table])
     
     print(days)
-    days = [[row[i] for row in days] for i in range(len(days[0]))]
+    days = list(map(list, zip(*days)))
+    # days = [[row[i] for row in days] for i in range(len(days[0]))]
     print(" ")
     print(days)    
     db.close()
@@ -218,6 +227,97 @@ def select(name,uid):
 
     return render_template('select.html')
 
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if(form.validate_on_submit() and request.method == 'POST'):
+        username = form.username.data
+        email = form.email.data
+        password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        db, cursor = connection()
+        x=cursor.execute('''SELECT * FROM users WHERE username = %s''',(username,))
+        if(int(x)>0):
+            flash("Username already exists")
+            return render_template('register.html', title='Register', form=form)
+        else:
+            cursor.execute('''INSERT INTO users(username, password, email) values(%s, %s, %s)''' ,(username, password, email))
+            db.commit()
+            db.close()
+            flash(f'Account created for {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+    return render_template('register.html', title='Register', form=form)
+
+
+@login_manager.user_loader
+def load_user(userID):
+    db, cursor = connection()
+    cursor.execute('''SELECT * FROM users WHERE userID = %s''',(int(userID),))
+    users = cursor.fetchone()
+    id= users[0]
+    username = users[1]
+    email = users[2]
+    password = users[3]
+    user = User(id,username,email,password)
+    db.close()
+    return user
+
+class User(UserMixin):
+    id = 1
+    username = ''
+    email = ''
+    password = ''
+    def __init__(self,id,username,email,password):
+        self.id=id
+        self.username=username
+        self.email=email
+        self.password=password
+
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if (current_user.is_authenticated):
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if(form.validate_on_submit() and request.method == 'POST'):
+        email = form.email.data
+        db, cursor = connection()
+        cursor.execute('''SELECT * FROM users WHERE email = %s''',(email,))
+        users = cursor.fetchone()
+        id= users[0]
+        username = users[1]
+        email = users[2]
+        password = users[3]
+        user = User(id,username,email,password)
+        if(bcrypt.check_password_hash(password, form.password.data)):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route("/about")
 def about():

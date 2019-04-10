@@ -9,6 +9,7 @@ cursor.execute('''drop table semesterEntry''')
 cursor.execute('''drop table branchEntry''')
 cursor.execute('''drop table courseEntry''')
 cursor.execute('''drop table collegeEntry''')
+cursor.execute('''drop table users''')
 
 cursor.execute('''CREATE TABLE collegeEntry(
     collegeID INT AUTO_INCREMENT PRIMARY KEY,
@@ -46,5 +47,11 @@ cursor.execute('''CREATE TABLE tableEntry(
     dayStart VARCHAR(50),
     dayEnd VARCHAR(50),
     roomNo VARCHAR(50))''')
+
+cursor.execute('''CREATE TABLE users(
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50),
+    email VARCHAR(50),
+    password VARCHAR(256))''')
 
 db.close()

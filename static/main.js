@@ -9,6 +9,12 @@ $(function () {
     $("#branch_link").hide();
     $("#semester_link").hide();
     $("#college_link").show();
+    
+    $("#course_link2").hide();
+    $("#branch_link2").hide();
+    $("#semester_link2").hide();
+    $("#college_link2").show();
+
     $("#show_table").hide();
 
 
@@ -17,6 +23,11 @@ $(function () {
         $("#branch_link").hide();
         $("#semester_link").hide();
         $("#college_link").hide();
+
+        $("#course_link2").show();
+        $("#branch_link2").hide();
+        $("#semester_link2").hide();
+        $("#college_link2").hide();
 
         // grab value
         var college_id = $("#college").val();
@@ -53,6 +64,11 @@ $(function () {
         $("#branch_link").show();
         $("#semester_link").hide();
         $("#college_link").hide();
+
+        $("#course_link2").hide();
+        $("#branch_link2").show();
+        $("#semester_link2").hide();
+        $("#college_link2").hide();
 
 
         // grab value
@@ -91,6 +107,11 @@ $(function () {
         $("#semester_link").show();
         $("#college_link").hide();
 
+        $("#course_link2").hide();
+        $("#branch_link2").hide();
+        $("#semester_link2").show();
+        $("#college_link2").hide();
+
         // grab value
         var branch_id = $("#branch").val();
 
@@ -126,6 +147,12 @@ $(function () {
         $("#branch_link").hide();
         $("#semester_link").hide();
         $("#college_link").hide();
+
+        $("#course_link2").hide();
+        $("#branch_link2").hide();
+        $("#semester_link2").hide();
+        $("#college_link2").hide();
+
         $("#show_table").show();
 
 
