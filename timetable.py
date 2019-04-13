@@ -85,7 +85,6 @@ def timetable(semester_id):
     
     print(days)
     days = list(map(list, zip(*days)))
-    # days = [[row[i] for row in days] for i in range(len(days[0]))]
     print(" ")
     print(days)    
     db.close()
